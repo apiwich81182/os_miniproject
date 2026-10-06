@@ -1,0 +1,106 @@
+[
+  {
+    "mechanism": "Pipe",
+    "size_kb": 4,
+    "iterations": 10000,
+    "elapsed_sec": 0.005774,
+    "throughput_mb": 6765.24,
+    "avg_latency_us": 0.58
+  },
+  {
+    "mechanism": "SharedMem",
+    "size_kb": 4,
+    "iterations": 10000,
+    "elapsed_sec": 0.275678,
+    "throughput_mb": 141.70,
+    "avg_latency_us": 27.57
+  },
+  {
+    "mechanism": "UNIX Socket",
+    "size_kb": 4,
+    "iterations": 10000,
+    "elapsed_sec": 0.013551,
+    "throughput_mb": 2882.63,
+    "avg_latency_us": 1.36
+  },
+  {
+    "mechanism": "POSIX MQ",
+    "size_kb": 4,
+    "iterations": 10000,
+    "elapsed_sec": 0.011957,
+    "throughput_mb": 3266.91,
+    "avg_latency_us": 1.20
+  },
+  {
+    "mechanism": "SHM-4-Workers",
+    "size_kb": 4,
+    "iterations": 10000,
+    "elapsed_sec": 0.004035,
+    "throughput_mb": 9680.92,
+    "avg_latency_us": 0.40
+  },
+  {
+    "mechanism": "Pipe",
+    "size_kb": 64,
+    "iterations": 2000,
+    "elapsed_sec": 0.054240,
+    "throughput_mb": 2304.57,
+    "avg_latency_us": 27.12
+  },
+  {
+    "mechanism": "SharedMem",
+    "size_kb": 64,
+    "iterations": 2000,
+    "elapsed_sec": 0.060472,
+    "throughput_mb": 2067.07,
+    "avg_latency_us": 30.24
+  },
+  {
+    "mechanism": "UNIX Socket",
+    "size_kb": 64,
+    "iterations": 2000,
+    "elapsed_sec": 0.016909,
+    "throughput_mb": 7392.51,
+    "avg_latency_us": 8.45
+  },
+  {
+    "mechanism": "SHM-4-Workers",
+    "size_kb": 64,
+    "iterations": 2000,
+    "elapsed_sec": 0.006338,
+    "throughput_mb": 19722.31,
+    "avg_latency_us": 3.17
+  },
+  {
+    "mechanism": "Pipe",
+    "size_kb": 1024,
+    "iterations": 200,
+    "elapsed_sec": 0.127505,
+    "throughput_mb": 1568.57,
+    "avg_latency_us": 637.52
+  },
+  {
+    "mechanism": "SharedMem",
+    "size_kb": 1024,
+    "iterations": 200,
+    "elapsed_sec": 0.024661,
+    "throughput_mb": 8109.97,
+    "avg_latency_us": 123.31
+  },
+  {
+    "mechanism": "UNIX Socket",
+    "size_kb": 1024,
+    "iterations": 200,
+    "elapsed_sec": 0.021379,
+    "throughput_mb": 9354.97,
+    "avg_latency_us": 106.89
+  },
+  {
+    "mechanism": "SHM-4-Workers",
+    "size_kb": 1024,
+    "iterations": 200,
+    "elapsed_sec": 0.012063,
+    "throughput_mb": 16579.62,
+    "avg_latency_us": 60.31
+  }
+]
