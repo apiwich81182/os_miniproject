@@ -22,6 +22,22 @@ interface Result {
   avg_latency_us: number;
 }
 
+const FALLBACK_DATA: Result[] = [
+  { mechanism: 'Pipe', size_kb: 4, iterations: 10000, elapsed_sec: 0.0091, throughput_mb: 4301.09, avg_latency_us: 0.91 },
+  { mechanism: 'SharedMem', size_kb: 4, iterations: 10000, elapsed_sec: 0.2762, throughput_mb: 141.45, avg_latency_us: 27.62 },
+  { mechanism: 'UNIX Socket', size_kb: 4, iterations: 10000, elapsed_sec: 0.0150, throughput_mb: 2601.74, avg_latency_us: 1.50 },
+  { mechanism: 'POSIX MQ', size_kb: 4, iterations: 10000, elapsed_sec: 0.0108, throughput_mb: 3601.89, avg_latency_us: 1.08 },
+  { mechanism: 'SHM-4-Workers', size_kb: 4, iterations: 10000, elapsed_sec: 0.0034, throughput_mb: 11577.50, avg_latency_us: 0.34 },
+  { mechanism: 'Pipe', size_kb: 64, iterations: 2000, elapsed_sec: 0.0577, throughput_mb: 2166.42, avg_latency_us: 28.85 },
+  { mechanism: 'SharedMem', size_kb: 64, iterations: 2000, elapsed_sec: 0.0663, throughput_mb: 1885.68, avg_latency_us: 33.14 },
+  { mechanism: 'UNIX Socket', size_kb: 64, iterations: 2000, elapsed_sec: 0.0129, throughput_mb: 9654.75, avg_latency_us: 6.47 },
+  { mechanism: 'SHM-4-Workers', size_kb: 64, iterations: 2000, elapsed_sec: 0.0063, throughput_mb: 19971.24, avg_latency_us: 3.13 },
+  { mechanism: 'Pipe', size_kb: 1024, iterations: 200, elapsed_sec: 0.1297, throughput_mb: 1541.83, avg_latency_us: 648.58 },
+  { mechanism: 'SharedMem', size_kb: 1024, iterations: 200, elapsed_sec: 0.0258, throughput_mb: 7761.26, avg_latency_us: 128.84 },
+  { mechanism: 'UNIX Socket', size_kb: 1024, iterations: 200, elapsed_sec: 0.0223, throughput_mb: 8981.09, avg_latency_us: 111.34 },
+  { mechanism: 'SHM-4-Workers', size_kb: 1024, iterations: 200, elapsed_sec: 0.0124, throughput_mb: 16181.23, avg_latency_us: 61.80 }
+];
+
 export default function App() {
   const [data, setData] = useState<Result[]>([]);
   const [activeSize, setActiveSize] = useState<number>(1024);
@@ -31,8 +47,7 @@ export default function App() {
   const [loading, setLoading] = useState<boolean>(false);
 
   // ดึงข้อมูลจาก public/results.json
-  const loadData = () => {
-    setLoading(true);
+  const fetchData = () => {
     fetch('/results.json?t=' + Date.now())
       .then(res => res.json())
       .then((json: Result[]) => {
@@ -41,27 +56,18 @@ export default function App() {
       })
       .catch(() => {
         // Fallback ข้อมูลล่าสุดจากการรันบน Linux Engine จริง
-        setData([
-          { mechanism: 'Pipe', size_kb: 4, iterations: 10000, elapsed_sec: 0.0091, throughput_mb: 4301.09, avg_latency_us: 0.91 },
-          { mechanism: 'SharedMem', size_kb: 4, iterations: 10000, elapsed_sec: 0.2762, throughput_mb: 141.45, avg_latency_us: 27.62 },
-          { mechanism: 'UNIX Socket', size_kb: 4, iterations: 10000, elapsed_sec: 0.0150, throughput_mb: 2601.74, avg_latency_us: 1.50 },
-          { mechanism: 'POSIX MQ', size_kb: 4, iterations: 10000, elapsed_sec: 0.0108, throughput_mb: 3601.89, avg_latency_us: 1.08 },
-          { mechanism: 'SHM-4-Workers', size_kb: 4, iterations: 10000, elapsed_sec: 0.0034, throughput_mb: 11577.50, avg_latency_us: 0.34 },
-          { mechanism: 'Pipe', size_kb: 64, iterations: 2000, elapsed_sec: 0.0577, throughput_mb: 2166.42, avg_latency_us: 28.85 },
-          { mechanism: 'SharedMem', size_kb: 64, iterations: 2000, elapsed_sec: 0.0663, throughput_mb: 1885.68, avg_latency_us: 33.14 },
-          { mechanism: 'UNIX Socket', size_kb: 64, iterations: 2000, elapsed_sec: 0.0129, throughput_mb: 9654.75, avg_latency_us: 6.47 },
-          { mechanism: 'SHM-4-Workers', size_kb: 64, iterations: 2000, elapsed_sec: 0.0063, throughput_mb: 19971.24, avg_latency_us: 3.13 },
-          { mechanism: 'Pipe', size_kb: 1024, iterations: 200, elapsed_sec: 0.1297, throughput_mb: 1541.83, avg_latency_us: 648.58 },
-          { mechanism: 'SharedMem', size_kb: 1024, iterations: 200, elapsed_sec: 0.0258, throughput_mb: 7761.26, avg_latency_us: 128.84 },
-          { mechanism: 'UNIX Socket', size_kb: 1024, iterations: 200, elapsed_sec: 0.0223, throughput_mb: 8981.09, avg_latency_us: 111.34 },
-          { mechanism: 'SHM-4-Workers', size_kb: 1024, iterations: 200, elapsed_sec: 0.0124, throughput_mb: 16181.23, avg_latency_us: 61.80 }
-        ]);
+        setData(FALLBACK_DATA);
         setLoading(false);
       });
   };
 
+  const handleRefresh = () => {
+    setLoading(true);
+    fetchData();
+  };
+
   useEffect(() => {
-    loadData();
+    fetchData();
   }, []);
 
   const filtered = data.filter(d => d.size_kb === activeSize);
@@ -99,7 +105,7 @@ export default function App() {
         </div>
         <div className="flex items-center gap-3">
           <button 
-            onClick={loadData}
+            onClick={handleRefresh}
             title="Reload results.json"
             className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white transition"
           >
